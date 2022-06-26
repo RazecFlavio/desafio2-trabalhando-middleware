@@ -23,9 +23,13 @@ function checksCreateTodosUserAvailability(request, response, next) {
   const user = request.user;
   if (user.pro) {
     return next();
-  }
-  if (!user.pro && !user.todos.length < 10) {
-    return response.status(403).json({ error: "Not able to create a new todo!" })
+  } else {
+    if (user.todos.length < 10) {
+      return next();
+    }
+    else {
+      return response.status(403).json({ error: "Not able to create a new todo!" })
+    }
   }
 }
 
@@ -57,7 +61,7 @@ function findUserById(request, response, next) {
   if (!user) {
     return response.status(404).json({ error: "User Not Found! " });
   }
-  request.user;
+  request.user = user;
   return next();
 }
 
